@@ -16,7 +16,7 @@ type (
 	}
 )
 
-func (p *Promotion) ToDomain() (domain.Promotion, error) {
+func (p *Promotion) ToDomain() *domain.Promotion {
 	var rules domain.PromotionRules
 	var reward domain.PromotionReward
 
@@ -43,13 +43,13 @@ func (p *Promotion) ToDomain() (domain.Promotion, error) {
 		rules, reward = r, rw
 	}
 
-	return domain.Promotion{
+	return &domain.Promotion{
 		ID:     p.ID,
 		Name:   p.Name,
 		Type:   domain.PromotionType(p.Type),
 		Rules:  rules,
 		Reward: reward,
-	}, nil
+	}
 }
 
 // helper to marshal JSONB into string
