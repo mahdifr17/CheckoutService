@@ -1,13 +1,13 @@
 server:
   port: "8080"
-  host: "0.0.0.0"
+  host: "localhost"
 
 database:
-  host: "localhost"
+  host: db
   port: "5432"
   name: "checkout_db"
   user: "postgres"
-  password: "password"
+  password: "b2TcGMtoh1LogbL0EKyn0kUZufBHLbcP"
   sslmode: "disable"
 
 app:
