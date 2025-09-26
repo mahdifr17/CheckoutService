@@ -14,15 +14,18 @@ import (
 func StartAPI(cfg *config.Config, db *gorm.DB) {
 	// Initialize repositories
 	productRepo := repository.NewProductRepository(db)
+	promotionRepo := repository.NewPromotionRepository(db)
+	orderRepo := repository.NewOrderRepository(db)
 
 	// Initialize services
-	checkoutService := services.NewCheckoutService(productRepo)
+	checkoutService := services.NewCheckoutService(productRepo, promotionRepo, orderRepo)
 
 	// Initialize handlers
 	checkoutHandler := handlers.NewCheckoutHandler(checkoutService)
 
 	// Setup router
 	r := gin.Default()
+	r.SetTrustedProxies(nil)
 
 	// Health check
 	r.GET("/health", func(c *gin.Context) {
