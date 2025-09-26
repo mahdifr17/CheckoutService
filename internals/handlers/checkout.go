@@ -5,6 +5,7 @@ import (
 
 	"github.com/mahdifr17/CheckoutService/internals/dtos"
 	"github.com/mahdifr17/CheckoutService/internals/services"
+	"github.com/mahdifr17/CheckoutService/pkg/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -35,11 +36,26 @@ func (h *CheckoutHandler) Checkout(c *gin.Context) {
 		return
 	}
 
-	// [ ] validate request
-	// [ ] parse to services.ProcessCheckoutInput
+	// validate request
+	if err := utils.GetValidator().Struct(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// parse to services.ProcessCheckoutInput
+	processInput := services.ProcessCheckoutInput{
+		Items: []services.ProcessCheckoutItemm{},
+	}
+
+	for _, item := range req.ListItem {
+		processInput.Items = append(processInput.Items, services.ProcessCheckoutItemm{
+			ProductID: item.ProductID,
+			Quantity:  item.Quantity,
+		})
+	}
 
 	response, err := h.checkoutService.ProcessCheckout(
-		c, services.ProcessCheckoutInput{},
+		c, processInput,
 	)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

@@ -36,6 +36,7 @@ func StartAPI(cfg *config.Config, db *gorm.DB) {
 	api := r.Group("/v1")
 	{
 		api.GET("/products", checkoutHandler.GetProducts)
+		api.POST("/checkout", checkoutHandler.Checkout)
 	}
 
 	log.Printf("Server starting on port %s", cfg.Server.Port)
